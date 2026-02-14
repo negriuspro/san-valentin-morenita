@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Mi Negra Hermosa ❤️</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Great+Vibes&display=swap"
+        rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            font-family: 'Georgia', serif;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        /* SOBRE - AUMENTADO MUCHO TAMAÑO */
+        .envelope-wrapper {
+            position: relative;
+            width: 700px;
+            height: 750px;
+            /* Aumentado a 750px para asegurar TOTALMENTE que quepa todo */
+            cursor: pointer;
+            transition: transform 0.6s;
+        }
+
+        .envelope-wrapper:hover {
+            transform: scale(1.02);
+        }
+
+        .envelope {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: #b71c1c;
+            /* Dark red */
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            z-index: 2;
+        }
+
+        /* Flaps - Redimensionados para sobre de 700x750 */
+        .flap {
+            position: absolute;
+            width: 0;
+            height: 0;
+            z-index: 3;
+        }
+
+        .flap.left {
+            border-left: 350px solid #c62828;
+            border-top: 375px solid transparent;
+            border-bottom: 375px solid transparent;
+            top: 0;
+            left: 0;
+        }
+
+        .flap.right {
+            border-right: 350px solid #c62828;
+            border-top: 375px solid transparent;
+            border-bottom: 375px solid transparent;
+            top: 0;
+            right: 0;
+        }
+
+        .flap.bottom {
+            border-bottom: 385px solid #d32f2f;
+            border-left: 350px solid transparent;
+            border-right: 350px solid transparent;
+            bottom: 0;
+            left: 0;
+            z-index: 4;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .flap.top {
+            border-top: 385px solid #e53935;
+            border-left: 350px solid transparent;
+            border-right: 350px solid transparent;
+            top: 0;
+            left: 0;
+            transform-origin: top;
+            transition: transform 0.6s ease-in-out, z-index 0.6s;
+            z-index: 5;
+        }
+
+        /* Letter */
+        .letter {
+            position: absolute;
+            width: 90%;
+            height: 90%;
+            /* Aumentado para tener más espacio */
+            background: #fff8f6;
+            top: 15%;
+            /* Más abajo (antes 5-10%) */
+            left: 5%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0;
+            box-sizing: border-box;
+            transition: transform 0.6s 0.2s, z-index 0.6s;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+            overflow: hidden;
+            /* Ocultar scroll si sobra un poco, ajustaremos fuente */
+        }
+
+        .letter::-webkit-scrollbar {
+            display: none;
+            /* No mostrar barra */
+        }
+
+        /* Estilos del Poema Elegante - AJUSTADO PARA QUE QUEPA */
+        .poema {
+            max-width: 600px;
+            margin: auto;
+            padding: 10px 30px;
+            /* Menos padding vertical */
+            color: #8B1E3F;
+            text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .poema h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 32px;
+            /* Un poco más chico */
+            margin: 0 0 8px 0;
+            line-height: 1.1;
+            font-weight: normal;
+        }
+
+        .poema p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 16px;
+            /* Letra legible pero compacta */
+            line-height: 1.35;
+            /* Menor interlineado */
+            letter-spacing: 0.2px;
+            margin-bottom: 6px;
+            /* Menos margen entre párrafos */
+            font-weight: 600;
+        }
+
+        .letter::-webkit-scrollbar {
+            width: 0;
+        }
+
+        /* Animation States */
+        /* Open Start: Flap rotates up */
+        .envelope-wrapper.open .flap.top {
+            transform: rotateX(180deg);
+            z-index: 1;
+            /* Moves behind the letter eventually, but visually looks 'open' */
+        }
+
+        /* Open End: Letter slides up */
+        .envelope-wrapper.open .letter {
+            transform: translateY(-40px);
+            /* Sube mucho menos para quedarse abajo */
+            z-index: 6;
+            /* Moves in front of flaps */
+        }
+
+        /* FOTOS POLAROID */
+        .polaroid {
+            position: absolute;
+            width: 140px;
+            padding: 10px;
+            padding-bottom: 35px;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            z-index: 1;
+            /* Detrás del sobre al inicio */
+            transition: all 0.8s ease-out 0.4s;
+            /* Delay para que salgan después de la carta */
+            opacity: 0;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, 20%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .polaroid img {
+            width: 100%;
+            height: 140px;
+            /* Cuadrado */
+            object-fit: cover;
+            border: 1px solid #eee;
+        }
+
+        .polaroid .caption {
+            margin-top: 10px;
+            font-family: 'Brush Script MT', 'Comic Sans MS', cursive;
+            font-size: 18px;
+            color: #333;
+        }
+
+        /* Posiciones al abrir */
+        .envelope-wrapper.open .polaroid.left {
+            opacity: 1;
+            transform: translate(-170%, -100%) rotate(-15deg);
+            z-index: 7;
+            /* Encima de todo */
+        }
+
+        .envelope-wrapper.open .polaroid.right {
+            opacity: 1;
+            transform: translate(70%, -100%) rotate(10deg);
+            z-index: 7;
+        }
+
+
+
+        /* Posiciones al abrir */
+        /* Posiciones al abrir - MÁS SEPARADOS */
+        .envelope-wrapper.open .polaroid.left {
+            opacity: 1;
+            transform: translate(-240%, -100%) rotate(-10deg);
+            /* Mucho más a la izquierda */
+            z-index: 7;
+        }
+
+        .envelope-wrapper.open .polaroid.right {
+            opacity: 1;
+            transform: translate(140%, -100%) rotate(5deg);
+            /* Mucho más a la derecha */
+            z-index: 7;
+        }
+
+        /* CORAZÓN */
+        .heart-seal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 30px;
+            z-index: 10;
+            transition: opacity 0.4s;
+        }
+
+        .envelope-wrapper.open .heart-seal {
+            opacity: 0;
+        }
+
+        .floating-heart {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 40px;
+            animation: beat 1s infinite;
+            z-index: 20;
+            cursor: pointer;
+        }
+
+        @keyframes beat {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        /* RESPONSIVE DESIGN - SOBRE MÁS GRANDE EN MÓVIL TAMBIÉN */
+        @media (max-width: 600px) {
+            .envelope-wrapper {
+                width: 360px;
+                height: 620px;
+                /* AÚN MÁS ALTO para garantizar cero scroll */
+            }
+
+            .flap.left {
+                border-left-width: 180px;
+                border-top-width: 310px;
+                border-bottom-width: 310px;
+            }
+
+            .flap.right {
+                border-right-width: 180px;
+                border-top-width: 310px;
+                border-bottom-width: 310px;
+            }
+
+            .flap.bottom {
+                border-bottom-width: 320px;
+                border-left-width: 180px;
+                border-right-width: 180px;
+            }
+
+            .flap.top {
+                border-top-width: 320px;
+                border-left-width: 180px;
+                border-right-width: 180px;
+            }
+
+            .letter {
+                width: 88%;
+                height: 92%;
+                top: 10%;
+                /* Más abajo en móvil */
+                left: 6%;
+                padding: 0;
+            }
+
+            /* Ajustes de fuente para móvil - COMPACTO */
+            .poema {
+                padding: 20px 15px;
+                padding-bottom: 140px;
+                /* ESPACIO RESERVADO PARA FOTOS */
+                justify-content: flex-start;
+                /* Alinear arriba para aprovechar espacio */
+            }
+
+            .poema h1 {
+                font-size: 24px;
+                /* Título ajustado */
+                margin-bottom: 5px;
+                margin-top: 10px;
+            }
+
+            .poema p {
+                font-size: 12px;
+                /* Letra pequeña pero clara */
+                line-height: 1.3;
+                margin-bottom: 4px;
+                letter-spacing: 0px;
+            }
+
+            .envelope-wrapper.open .letter {
+                transform: translateY(-20px);
+                /* Sube poquito en móvil */
+                z-index: 6;
+            }
+
+            /* Polaroids abajo */
+            .polaroid {
+                width: 85px;
+                padding: 4px;
+                padding-bottom: 25px;
+            }
+
+            .polaroid img {
+                height: 85px;
+            }
+
+            .polaroid .caption {
+                font-size: 10px;
+                margin-top: 2px;
+            }
+
+            /* Mover las fotos hacia ABAJO y MÁS CENTRADAS para no salirse */
+            /* UBICADAS EN EL ESPACIO RESERVADO (bottom padding) */
+            .envelope-wrapper.open .polaroid.left {
+                opacity: 1;
+                transform: translate(-100%, 0%) rotate(-10deg);
+                top: auto;
+                bottom: -20px;
+                /* Más abajo */
+            }
+
+            .envelope-wrapper.open .polaroid.right {
+                opacity: 1;
+                transform: translate(0%, 0%) rotate(5deg);
+                top: auto;
+                bottom: -20px;
+                /* Más abajo */
+            }
+        }
+
+        /* PÉTALOS */
+        .petal {
+            position: fixed;
+            top: -50px;
+            font-size: 24px;
+            animation: fall linear infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+
+
+        /* Instrucción */
+        .instruction {
+            position: absolute;
+            bottom: -50px;
+            width: 100%;
+            text-align: center;
+            color: #b71c1c;
+            font-weight: bold;
+            opacity: 1;
+            transition: opacity 0.5s;
+        }
+
+        .envelope-wrapper.open .instruction {
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+
+
+    <div class="envelope-wrapper" onclick="toggleEnvelope()">
+        <div class="envelope">
+            <div class="flap left"></div>
+            <div class="flap right"></div>
+            <div class="flap bottom"></div>
+            <div class="letter">
+                <div class="poema">
+                    <h1>Para mi morenita hermosa<br>en este San Valentín</h1>
+
+                    <p>Morenita hermosa,<br>
+                        tú eres la calma que abraza mis días<br>
+                        y la sonrisa que despierta mi alma.</p>
+
+                    <p>Tu piel guarda el brillo del sol al atardecer,<br>
+                        y en tus ojos encuentro un hogar<br>
+                        donde quiero quedarme para siempre.</p>
+
+                    <p>Eres dulce como la brisa suave,<br>
+                        fuerte como el mar cuando defiende su orilla,<br>
+                        y tan hermosa que hasta las estrellas<br>
+                        parecen mirarte con envidia.</p>
+
+                    <p>En este San Valentín no te regalo solo palabras,<br>
+                        te regalo mi lealtad, mi respeto y mi corazón sincero.<br>
+                        Porque amarte no es solo sentir,<br>
+                        es elegirte cada día, sin dudas y sin miedo.</p>
+
+                    <p>Gracias por ser mi alegría,<br>
+                        mi paz, mi inspiración constante.<br>
+                        <strong>Morenita hermosa,<br>
+                            si el amor tuviera nombre,<br>
+                            seria el tuyo. ❤️✨</strong>
+                    </p>
+                </div>
+            </div>
+
+            <!-- FOTOS -->
+            <!--
+                 INSTRUCCIONES:
+                 1. Busca una foto de ella y guárdala como "ella.jpg" en la misma carpeta, o cambia el 'src' por el link de la foto.
+                 2. Busca una foto de los dos y guárdala como "nosotros.jpg", o cambia el 'src'.
+            -->
+            <div class="polaroid left">
+                <!-- Foto de Ella -->
+                <img src="WhatsApp Image 2026-02-13 at 9.10.05 PM.jpeg" alt="Foto de Ella">
+                <div class="caption">i love you &lt;3</div>
+            </div>
+
+            <div class="polaroid right">
+                <!-- Foto Juntos -->
+                <img src="WhatsApp_Image_2026-02-13_at_9.10.00_PM-removebg-preview.png" alt="Foto Juntos">
+                <div class="caption">i love you &lt;3</div>
+            </div>
+            <div class="flap top">
+                <div class="heart-seal">❤️</div>
+            </div>
+        </div>
+        <div class="instruction">¡Tócame para abrir! 💌</div>
+    </div>
+
+    <div class="floating-heart">❤️</div>
+
+    <!-- Audio Local -->
+    <audio id="localAudio" src="Jay Wheeler - EaZt (LetraLyrics) (1).mp3" loop></audio>
+
+    <script>
+        var audio = document.getElementById("localAudio");
+
+        // Configurar tiempo de inicio al cargar metadata
+        audio.addEventListener("loadedmetadata", function () {
+            audio.currentTime = 137; // 2:17
+        });
+
+        /* Animation Scripts */
+        function toggleEnvelope() {
+            const envelope = document.querySelector('.envelope-wrapper');
+            envelope.classList.toggle('open');
+
+            if (envelope.classList.contains('open')) {
+                if (audio.paused) {
+                    audio.currentTime = 137; // Empieza en 2:17
+                    audio.play().catch(error => {
+                        console.log("Autoplay bloqueado: ", error);
+                    });
+                }
+            }
+        }
+
+        /* Crear pétalos */
+        function createPetal() {
+            const petal = document.createElement("div");
+            petal.classList.add("petal");
+            petal.innerHTML = Math.random() > 0.5 ? "🌹" : "✨";
+            petal.style.left = Math.random() * 100 + "vw";
+            petal.style.animationDuration = (3 + Math.random() * 5) + "s";
+            petal.style.fontSize = (20 + Math.random() * 15) + "px";
+            document.body.appendChild(petal);
+
+            setTimeout(() => {
+                petal.remove();
+            }, 8000);
+        }
+
+        setInterval(createPetal, 400);
+    </script>
+
+</body>
+
+</html>
